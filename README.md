@@ -153,6 +153,6 @@ MIT License — free to use, modify, and deploy.
 ---
 
 <div align="center">
-Built with ❤️ in Pune, Maharashtra 🇮🇳<br>
+Built with Purpose 🇮🇳<br>
 <b>Arjun</b> · <a href="https://github.com/Arjuna797">github.com/Arjuna797</a>
 </div>
