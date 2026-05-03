@@ -22,12 +22,12 @@ os.makedirs(DATA_DIR,   exist_ok=True)
 os.makedirs(MODELS_DIR, exist_ok=True)
 
 # ─────────────────────────────────────────────────────────────────────────────
-# VENDOR SCORING (inline — no modules/ import needed)
+# VENDOR SCORING (inline)
 # ─────────────────────────────────────────────────────────────────────────────
 def get_alternate_vendors(product_name: str, top_n: int = 3) -> pd.DataFrame:
     try:
-        conn  = sqlite3.connect(DB_PATH)
-        df    = pd.read_sql(
+        conn = sqlite3.connect(DB_PATH)
+        df   = pd.read_sql(
             "SELECT Vendor_Name, Vendor_State, Vendor_City, Base_Price_INR, "
             "Lead_Time_Days, On_Time_Rate_Pct, Preference_Rank "
             "FROM Alternate_Vendors WHERE Product_Name = ? ORDER BY Lead_Time_Days ASC",
@@ -100,7 +100,7 @@ def get_high_risk_orders(model_artifact: dict, threshold: float = 0.30,
             high_risk = df.nlargest(20, "Delay_Probability").copy()
             high_risk["_fallback_note"] = "⚠ No orders exceeded threshold — showing top 20 highest-risk."
         return high_risk.sort_values("Delay_Probability", ascending=False)
-    except Exception as e:
+    except Exception:
         return pd.DataFrame()
 
 
@@ -257,7 +257,7 @@ def _train_model():
 
     feat_cols = num_cols + cat_cols
     X, y = df[feat_cols], df[target]
-    X_tr, X_te, y_tr, y_te = train_test_split(X, y, test_size=0.2, stratify=y, random_state=42)
+    X_tr,X_te,y_tr,y_te = train_test_split(X, y, test_size=0.2, stratify=y, random_state=42)
     model = xgb.XGBClassifier(**XGB_PARAMS)
     model.fit(X_tr, y_tr, eval_set=[(X_te,y_te)], verbose=False)
     joblib.dump({"model":model,"feature_cols":feat_cols,"num_cols":num_cols,"cat_cols":cat_cols}, MODEL_PATH)
@@ -279,13 +279,14 @@ def _train_iso():
             if c in df.columns: return c
         return None
 
+    n = len(df)
     feat = pd.DataFrame()
-    feat["Days_Since_Order"]    = pd.to_numeric(df.get("Days_Since_Order", pd.Series([30]*len(df))), errors="coerce").fillna(30)
+    feat["Days_Since_Order"]    = pd.to_numeric(df["Days_Since_Order"] if "Days_Since_Order" in df.columns else pd.Series([30]*n), errors="coerce").fillna(30)
     feat["Cat_Avg_Lead_Time"]   = 7.0
     vc = find_col(df,["Sales","Order_Item_Total"])
-    feat["Order_Value"]         = pd.to_numeric(df[vc] if vc else pd.Series([500]*len(df)), errors="coerce").fillna(500)
-    feat["Shipping_Delay_Days"] = pd.to_numeric(df.get("Shipping_Delay_Days", pd.Series([0]*len(df))), errors="coerce").fillna(0)
-    feat["Benefit_per_order"]   = pd.to_numeric(df.get("Benefit_per_order", pd.Series([0]*len(df))), errors="coerce").fillna(0)
+    feat["Order_Value"]         = pd.to_numeric(df[vc] if vc else pd.Series([500]*n), errors="coerce").fillna(500)
+    feat["Shipping_Delay_Days"] = pd.to_numeric(df["Shipping_Delay_Days"] if "Shipping_Delay_Days" in df.columns else pd.Series([0]*n), errors="coerce").fillna(0)
+    feat["Benefit_per_order"]   = pd.to_numeric(df["Benefit_per_order"] if "Benefit_per_order" in df.columns else pd.Series([0]*n), errors="coerce").fillna(0)
     feat["Wait_vs_Expected"]    = (feat["Days_Since_Order"] / feat["Cat_Avg_Lead_Time"].replace(0,1)).clip(0,50)
     feat = feat.fillna(0)
 
@@ -505,9 +506,14 @@ with tab2:
                     iso    = ia["model"]
                     scaler = ia["scaler"]
                     fcols  = ia["feature_cols"]
-                    feat = pd.DataFrame(index=pdf.index)
+                    feat   = pd.DataFrame(index=pdf.index)
                     for c in fcols:
-                        feat[c] = pd.to_numeric(pdf.get(c,0), errors="coerce").fillna(0)
+                        # FIX: always create a Series, never a scalar
+                        if c in pdf.columns:
+                            col_data = pd.to_numeric(pdf[c], errors="coerce").fillna(0)
+                        else:
+                            col_data = pd.Series([0]*len(pdf), index=pdf.index, dtype=float)
+                        feat[c] = col_data
                     Xs = scaler.transform(feat)
                     pdf["Anomaly_Score"] = iso.decision_function(Xs)
                     pdf["Is_Ghost_PO"]   = (iso.predict(Xs)==-1).astype(int)
