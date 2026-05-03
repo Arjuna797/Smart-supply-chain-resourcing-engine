@@ -3,7 +3,6 @@
 <div align="center">
 
 ![Python](https://img.shields.io/badge/Python-3.11-blue?logo=python)
-![Streamlit](https://smart-supply-chain-resourcing-engine-fe4j5q65lgwjbmzkyekmbw.streamlit.app/)
 ![XGBoost](https://img.shields.io/badge/ML-XGBoost-green)
 ![IsolationForest](https://img.shields.io/badge/ML-Isolation%20Forest-orange)
 ![SQLite](https://img.shields.io/badge/Database-SQLite-lightblue)
