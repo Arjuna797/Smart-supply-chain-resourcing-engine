@@ -113,15 +113,8 @@ smart-supply-chain-resourcing-engine/
 
 ---
 
-## 🚀 Deploy on Streamlit Cloud
 
-1. Fork this repo
-2. Go to **[share.streamlit.io](https://share.streamlit.io)**
-3. Click **New App** → select this repo
-4. Set **Main file path**: `streamlit_app.py`
-5. Click **Deploy**
-
-> ⏳ First load takes ~3 minutes — database and models are auto-generated on Streamlit Cloud. Every reload after is instant.
+>
 
 ---
 
@@ -145,11 +138,6 @@ streamlit run app.py
 
 ---
 
-## 🎯 How to Explain This Project (For Interviews / Presentations)
-
-> *"This system uses XGBoost to predict which purchase orders will be delayed — 7 to 14 days before the deadline. When a PO is flagged high-risk, the engine automatically queries a synthetic Indian vendor database and ranks the top 3 alternate suppliers by lead time and cost. A second module uses Isolation Forest — an unsupervised ML algorithm — to detect Ghost POs: orders stuck in Processing that have been pending far too long relative to their product category. The entire system is accessible through a Streamlit dashboard with three tabs, and deployed live on Streamlit Cloud."*
-
----
 
 ## 📁 Dataset
 
