@@ -19,9 +19,6 @@ Predicts supplier delays before they happen. Detects Ghost POs. Finds alternate 
 ---
 
 ## 👨‍💻 About Me
-
-Hi, I'm **Arjun** — a data science and supply chain enthusiast based in **Pune, Maharashtra, India**.
-
 I built this project to bridge the gap between raw procurement data and intelligent, automated decision-making for materials management teams. Having seen how manufacturing companies in India lose crores annually due to reactive supply chain management, I wanted to build something that shifts the approach from **"find out after it's too late"** to **"predict and act before it happens."**
 
 This project combines my interest in **Machine Learning**, **ERP/procurement operations**, and **real-world Indian business context** — using a free, open-source tech stack deployable by anyone.
