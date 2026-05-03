@@ -18,12 +18,12 @@ Predicts supplier delays before they happen. Detects Ghost POs. Finds alternate 
 
 ---
 
-## 👨‍💻 About Me
-I built this project to bridge the gap between raw procurement data and intelligent, automated decision-making for materials management teams. Having seen how manufacturing companies in India lose crores annually due to reactive supply chain management, I wanted to build something that shifts the approach from **"find out after it's too late"** to **"predict and act before it happens."**
+## 👨‍💻 About This Project
+I built this project to bridge the gap between raw procurement data and intelligent, automated decision-making for materials management teams. Having seen how manufacturing companies lose crores annually due to reactive supply chain management, I wanted to build something that shifts the approach from **"find out after it's too late"** to **"predict and act before it happens."**
 
 This project combines my interest in **Machine Learning**, **ERP/procurement operations**, and **real-world Indian business context** — using a free, open-source tech stack deployable by anyone.
 
-- 📍 Based in Pune, Maharashtra
+- 📍 Based in Maharashtra India
 - 🎓 Interest in Supply Chain Analytics, ML for Tabular Data, Business Intelligence
 - 🔧 Tech: Python · Pandas · XGBoost · Scikit-Learn · Streamlit · SQLite · Plotly
 
